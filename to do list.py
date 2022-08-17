@@ -20,31 +20,7 @@ def validare_data(data):
     return True
 
 
-def interogare():
-    global continuare
 
-    while continuare == "y":
-        categorii = ["munca", "timp liber", "prieteni"]
-        task = input("Introducere task :")
-        limita = input("Introducere data limita in format dd-mm-yy-hh:mm :")
-        if validare_data(limita) is not True:
-            break
-        utilizator = input("Introducere utilizator :")
-        categorie = input("Selecteaza categoria (munca, timp liber, prieteni:")
-        if categorie not in categorii:
-            print("ERR categorie, task nu a fost introdus")
-            break
-
-        with open('task', 'a') as csv_file:
-            scriere_csv1 = csv.writer(csv_file, delimiter=",")
-            scriere_csv1.writerow([task, limita, utilizator, categorie])
-        with open('categorie', 'a') as csv_file:
-            scriere_csv = csv.writer(csv_file, delimiter=",")
-            scriere_csv.writerow([categorii])
-        continuare = input("Doresti sa introduci un alt task ? y/n ?")
-        pass
-
-    return True
 
 
 def meniu():
@@ -142,12 +118,37 @@ def meniu():
             delete()
 
         elif alegere == "0":
-            return interogare()
+            interogare()
 
         print('After sorting')
         continuare1 = input("Doresti sa introduci o alta operatiune ? y/n ?")
 
 
+def interogare():
+    global continuare
+
+    while continuare == "y":
+        categorii = ["munca", "timp liber", "prieteni"]
+        task = input("Introducere task: ")
+        limita = input("Introducere data limita in format dd-mm-yy-hh:mm: ")
+        if validare_data(limita) is not True:
+            break
+        utilizator = input("Introducere utilizator :")
+        categorie = input("Selecteaza categoria (munca, timp liber, prieteni): ")
+        if categorie not in categorii:
+            print("ERR categorie, task nu a fost introdus")
+            break
+
+        with open('task', 'a') as csv_file:
+            scriere_csv1 = csv.writer(csv_file, delimiter=",")
+            scriere_csv1.writerow([task, limita, utilizator, categorie])
+        with open('categorie', 'a') as csv_file:
+            scriere_csv = csv.writer(csv_file, delimiter=",")
+            scriere_csv.writerow([categorii])
+        continuare = input("Doresti sa introduci un alt task ? y/n ")
+        pass
+
+    return True
 
 
 def edit():
@@ -155,9 +156,9 @@ def edit():
     filtered_df = pd.read_csv("task", header=None)
     print(filtered_df)
     alegere = int(input("Alege randul, conform index, pe care vrei sa-l editezi !"))
-    alegere1 = int(input("Alege coloana, conform index, pe care vrei sa-l editezi !"))
+    alegere1 = int(input("Alege coloana, conform index, pe care vrei s-o editezi !"))
 
-    filtered_df.loc[alegere, alegere1] = input("Schimbi cu : ")
+    filtered_df.loc[alegere, alegere1] = input("Schimbi cu: ")
     filtered_df.to_csv("task", index=False)
 
     print(filtered_df)
